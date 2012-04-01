@@ -1,3 +1,5 @@
+import java.io.File;
+
 /**
  * GDM_Controller
  * The controller portion of the model view controller.
@@ -22,7 +24,38 @@ public class GDM_Controller {
 	 */
 	public GDM_Controller()
 	{
-		gdm_view = new GDM_View();
-		gdm_model = new GDM_Model();
+		gdm_model = new GDM_Model(this);
+		gdm_view = new GDM_View(this, gdm_model);
+		while (! initializeDirectory());
+		exit();
+	}
+	
+	public boolean initializeDirectory() {
+		File directory = gdm_view.chooseDirectory();
+		if (directory == null)
+		{
+			gdm_view.error_noFileChosen();
+		}
+		else if (!directory.isDirectory())
+		{
+			gdm_view.error_notDirectory();
+		}
+		else
+		{
+			gdm_model.initializeDirectory(directory);
+			gdm_view.modelChanged();
+			return true;
+		}
+		return false;
+	}
+	
+	public void modelChanged()
+	{
+		gdm_view.modelChanged();
+	}
+	
+	public void exit()
+	{
+		System.exit(0);
 	}
 }
