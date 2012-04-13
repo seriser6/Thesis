@@ -27,7 +27,8 @@ public class GDM_Controller {
 		gdm_model = new GDM_Model(this);
 		gdm_view = new GDM_View(this, gdm_model);
 		while (! initializeDirectory());
-		exit();
+		while (true);
+		//exit();
 	}
 	
 	public boolean initializeDirectory() {
