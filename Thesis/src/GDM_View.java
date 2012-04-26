@@ -46,11 +46,6 @@ public class GDM_View {
 		return directory;
 	}
 	
-	public void modelChanged()
-	{
-		System.out.println(gdm_model.getDataString());
-	}
-	
 	public void error_notDirectory()
 	{
 		System.out.println("Error: File chosen was not a directory");

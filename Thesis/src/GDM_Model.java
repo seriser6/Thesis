@@ -1,16 +1,22 @@
 import java.io.File;
+import java.util.Observable;
 
 /**
  * GDM_Model
  * The model portion of the model view controller.
  * @author John Sarris (sarriskj)
  */
-public class GDM_Model {
+public class GDM_Model 
+	extends Observable
+	implements Runnable
+{
 
 	// The GDM_Controller object
 	private GDM_Controller gdm_controller;
 	
 	private File toplevel_directory;
+	
+	private Tree_Component fileStruct;
 	
 	/**
 	 * GDM_Model()
@@ -21,14 +27,9 @@ public class GDM_Model {
 		this.gdm_controller = gdm_controller;
 	}
 	
-	public void modelChanged()
+	public void initializeDirectory(File directory, Metric_Abstract metricType)
 	{
-		gdm_controller.modelChanged();
-	}
-	
-	public void initializeDirectory(File directory)
-	{
-		this.toplevel_directory = directory;
+		fileStruct = new Tree_Base(directory, metricType);
 	}
 	
 	public String getDataString()
@@ -55,5 +56,11 @@ public class GDM_Model {
 			}
 		}
 		return dataString;
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
 	}
 }
