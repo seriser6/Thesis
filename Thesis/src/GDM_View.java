@@ -41,7 +41,6 @@ public class GDM_View {
 	private JButton btnNewButton_1;
 	private JButton btnNewButton;
 	private JPanel panel_buttons;
-	private JTextArea textArea;
 	
 	/**
 	 * GDM_View()
@@ -89,11 +88,6 @@ public class GDM_View {
 		
 		JPanel panel_graphic = new JPanel();
 		frame.getContentPane().add(panel_graphic, BorderLayout.CENTER);
-		
-		textArea = new JTextArea();
-		textArea.setPreferredSize(new Dimension(475, 200));
-		textArea.setEditable(false);
-		panel_graphic.add(textArea);
 		
 		panel_text = new JPanel();
 		frame.getContentPane().add(panel_text, BorderLayout.SOUTH);
