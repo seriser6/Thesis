@@ -32,15 +32,61 @@ public class Tree_Directory extends Tree_Component {
 		}
 	}
 	
-	public void setMetricValue(Metric_Abstract metricType, File file)
+	public void setMetricValue(Metric_Abstract metricType)
 	{
-		for (int i = 0; i < subFiles.size(); i++)
-		{
-		}
+		Iterator<Tree_Component> iter = getIterator();
+		metricValue += iter.next().getMetricValue();
 	}
 	
 	public Iterator<Tree_Component> getIterator()
 	{
 		return subFiles.iterator();
+	}
+	
+	public void makeDimension(int dimension)
+	{
+		this.dimension = dimension;
+
+		Iterator<Tree_Component> iter = getIterator();
+		while (iter.hasNext()) {
+			Tree_Component treeComponent = iter.next();
+			treeComponent.makeDimension((int) (10000 * treeComponent.getMetricValue() / metricValue));
+		}
+	}
+	
+	public void makeDimension()
+	{
+		makeDimension(10000);
+	}
+	
+	public void makeRectangleBase(int sizeX, int sizeY)
+	{
+		makeRectangle(sizeX, sizeY, 0, 0, true);
+	}
+	
+	// horizontal if horizontal is true, else vertical
+	public void makeRectangle(int sizeX, int sizeY, int posX, int posY, boolean horizontal)
+	{
+		super.makeRectangle(sizeX,sizeY,posX,posY,horizontal);
+		Iterator<Tree_Component> iter = getIterator();
+		
+		
+		int childSize;
+		if (horizontal) {
+			while (iter.hasNext()) {
+				Tree_Component treeComponent = iter.next();
+				childSize = sizeX * treeComponent.getDimension() / dimension;
+				treeComponent.makeRectangle(childSize, sizeY, posX, posY, false);
+				posX += childSize;
+			}
+		}
+		else {
+			while (iter.hasNext()) {
+				Tree_Component treeComponent = iter.next();
+				childSize = sizeY * treeComponent.getDimension() / dimension;
+				treeComponent.makeRectangle(sizeX, childSize, posX, posY, true);
+				posY += childSize;
+			}
+		}
 	}
 }

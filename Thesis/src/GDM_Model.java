@@ -16,7 +16,7 @@ public class GDM_Model
 	
 	private File toplevel_directory;
 	
-	private Tree_Component fileStruct;
+	private Tree_Directory fileStruct;
 	
 	/**
 	 * GDM_Model()
@@ -27,9 +27,16 @@ public class GDM_Model
 		this.gdm_controller = gdm_controller;
 	}
 	
-	public void initializeDirectory(File directory, Metric_Abstract metricType)
+	public void initializeDirectory(File directory, Metric_Abstract metricType, GDM_View view)
 	{
 		fileStruct = new Tree_Base(directory, metricType);
+		
+		fileStruct.makeDimension();
+		
+		int sizeX = view.getCanvasSizeX();
+		int sizeY = view.getCanvasSizeY();
+		
+		fileStruct.makeRectangleBase(sizeX, sizeY);
 	}
 	
 	public String getDataString()

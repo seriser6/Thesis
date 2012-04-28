@@ -13,5 +13,4 @@ public class Tree_Base extends Tree_Directory {
 	public String getParentPath() {
 		return parentPath;
 	}
-
 }
