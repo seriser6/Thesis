@@ -13,6 +13,9 @@ public class GDM_Controller {
 	// The gdm_model object
 	private GDM_Model gdm_model;
 	
+	// The metric being used
+	private Metric_Abstract metricType;
+	
 	public static void main(String[] args)
 	{
 		new GDM_Controller();
@@ -24,6 +27,7 @@ public class GDM_Controller {
 	 */
 	public GDM_Controller()
 	{
+		metricType = new Metric_Size();
 		gdm_model = new GDM_Model(this);
 		gdm_view = new GDM_View(this, gdm_model);
 		while (! initializeDirectory());
@@ -43,16 +47,10 @@ public class GDM_Controller {
 		}
 		else
 		{
-			gdm_model.initializeDirectory(directory);
-			gdm_view.modelChanged();
+			gdm_model.initializeDirectory(directory, metricType);
 			return true;
 		}
 		return false;
-	}
-	
-	public void modelChanged()
-	{
-		gdm_view.modelChanged();
 	}
 	
 	public void exit()

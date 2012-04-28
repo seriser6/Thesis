@@ -121,11 +121,6 @@ public class GDM_View {
 		return directory;
 	}
 	
-	public void modelChanged()
-	{
-		textArea.setText(gdm_model.getDataString());
-	}
-	
 	public void error_notDirectory()
 	{
 		textArea.setText("Error: File chosen was not a directory");
