@@ -19,6 +19,22 @@ public abstract class Tree_Component {
 		return metricValue;
 	}
 	
+	public int getPositionX() {
+		return positionX;
+	}
+
+	public int getPositionY() {
+		return positionY;
+	}
+
+	public int getSizeX() {
+		return sizeX;
+	}
+
+	public int getSizeY() {
+		return sizeY;
+	}
+
 	abstract void setMetricValue(Metric_Abstract metricType);
 	
 	public String getName()
@@ -52,4 +68,6 @@ public abstract class Tree_Component {
 		this.positionX = posX;
 		this.positionY = posY;
 	}
+	
+	abstract boolean isDirectory();
 }

@@ -1,4 +1,5 @@
 import java.io.File;
+import java.util.Iterator;
 import java.util.Observable;
 
 /**
@@ -14,7 +15,7 @@ public class GDM_Model
 	// The GDM_Controller object
 	private GDM_Controller gdm_controller;
 	
-	private File toplevel_directory;
+	private Tree_Base toplevel_directory;
 	
 	private Tree_Directory fileStruct;
 	
@@ -29,40 +30,48 @@ public class GDM_Model
 	
 	public void initializeDirectory(File directory, Metric_Abstract metricType, GDM_View view)
 	{
-		fileStruct = new Tree_Base(directory, metricType);
+		toplevel_directory = new Tree_Base(directory, metricType);
 		
-		fileStruct.makeDimension();
+		toplevel_directory.makeDimension();
 		
-		int sizeX = view.getCanvasSizeX();
-		int sizeY = view.getCanvasSizeY();
+		int sizeX = view.getCanvasWidth();
+		int sizeY = view.getCanvasHeight();
 		
-		fileStruct.makeRectangleBase(sizeX, sizeY);
+		toplevel_directory.makeRectangleBase(sizeX, sizeY);
+		
+		fileStruct = toplevel_directory;
 	}
 	
 	public String getDataString()
 	{
-		return getDirectoryData(toplevel_directory, "");
+		return getDataString(fileStruct, "");
 	}
 	
-	public String getDirectoryData(File directory, String indent)
+	public String getDataString(Tree_Directory directory, String indent)
 	{
-		String dataString = indent + directory.getName() +
-				            " - " + directory.length() + " bytes\n";
+		String dataString = indent + directory.getName() + " - " + 
+							directory.getMetricValue() + "\n";
+		
 		indent += "  ";
-		File[] files = directory.listFiles();
-		for (int i = 0; i < files.length; i++)
-		{
-			if (files[i].isDirectory())
-			{
-				dataString += getDirectoryData(files[i], indent);
+		
+		Iterator<Tree_Component> iter = directory.getIterator();
+		
+		while (iter.hasNext()) {
+			Tree_Component treeComponent = iter.next();
+			if (treeComponent.isDirectory()) {
+				dataString += getDataString((Tree_Directory) treeComponent, indent);
 			}
-			else
-			{
-				dataString += indent + files[i].getName() +
-						      " - " + files[i].length() + " bytes\n";
+			else {
+				dataString += indent + treeComponent.getName() + " - " + 
+							  treeComponent.getMetricValue() + "\n";
 			}
 		}
+		
 		return dataString;
+	}
+	
+	public Tree_Directory getTreeDirectory() {
+		return fileStruct;
 	}
 
 	@Override

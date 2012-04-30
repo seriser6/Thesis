@@ -23,4 +23,8 @@ public class Tree_File extends Tree_Component {
 	void setMetricValue(Metric_Abstract metricType) {
 		setMetricValue(metricType, new File(getPath()));
 	}
+	
+	public boolean isDirectory() {
+		return false;
+	}
 }

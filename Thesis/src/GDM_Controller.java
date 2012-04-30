@@ -31,6 +31,8 @@ public class GDM_Controller {
 		gdm_model = new GDM_Model(this);
 		gdm_view = new GDM_View(this, gdm_model);
 		while (! initializeDirectory());
+		gdm_view.repaint();
+		System.out.println(gdm_model.getDataString());
 		while (true);
 		//exit();
 	}
@@ -47,7 +49,7 @@ public class GDM_Controller {
 		}
 		else
 		{
-			gdm_model.initializeDirectory(directory, metricType);
+			gdm_model.initializeDirectory(directory, metricType, gdm_view);
 			return true;
 		}
 		return false;

@@ -1,22 +1,18 @@
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Graphics;
 import java.io.File;
+import java.util.Iterator;
 
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JMenuBar;
-import javax.swing.JToolBar;
-import java.awt.BorderLayout;
-import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 import javax.swing.JPanel;
-import javax.swing.border.EtchedBorder;
-import javax.swing.JTextPane;
-import java.awt.FlowLayout;
-import javax.swing.JTextArea;
-import java.awt.Dimension;
-import javax.swing.JScrollBar;
-import javax.swing.JScrollPane;
-import java.awt.Rectangle;
-import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingConstants;
 
 /**
  * GDM_View
@@ -41,6 +37,8 @@ public class GDM_View {
 	private JButton btnNewButton_1;
 	private JButton btnNewButton;
 	private JPanel panel_buttons;
+	private JPanel panel_graphic;
+	private JLabel label_text;
 	
 	/**
 	 * GDM_View()
@@ -61,7 +59,7 @@ public class GDM_View {
 	{
 		frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setPreferredSize(new Dimension(500, 300));
+		frame.setPreferredSize(new Dimension(1900, 1000));
 		frame.setVisible(true);
 		
 		menuBar = new JMenuBar();
@@ -86,11 +84,15 @@ public class GDM_View {
 		btnNewButton_2 = new JButton("New button");
 		panel_buttons.add(btnNewButton_2);
 		
-		JPanel panel_graphic = new JPanel();
+		panel_graphic = new JPanel();
 		frame.getContentPane().add(panel_graphic, BorderLayout.CENTER);
 		
 		panel_text = new JPanel();
 		frame.getContentPane().add(panel_text, BorderLayout.SOUTH);
+		
+		label_text = new JLabel("Bottom Label");
+		label_text.setHorizontalAlignment(SwingConstants.LEFT);
+		panel_text.add(label_text);
 		
 		frame.pack();
 	}
@@ -117,11 +119,41 @@ public class GDM_View {
 	
 	public void error_notDirectory()
 	{
-		textArea.setText("Error: File chosen was not a directory");
+		label_text.setText("Error: File chosen was not a directory");
 	}
 	
 	public void error_noFileChosen()
 	{
-		textArea.setText("Error: No file was chosen");
+		label_text.setText("Error: No file was chosen");
+	}
+	
+	public int getCanvasWidth() {
+		return panel_graphic.getWidth()-1;
+	}
+	public int getCanvasHeight() {
+		return panel_graphic.getHeight()-1;
+	}
+	
+	public void repaint() {
+		paint(panel_graphic.getGraphics());
+	}
+	
+	public void paint(Graphics g) {
+		drawRectangle(g, gdm_model.getTreeDirectory());
+	}
+	
+	public void drawRectangle(Graphics g, Tree_Directory directory) {
+		g.drawRect(directory.getPositionX(), directory.getPositionY(), directory.getSizeX(), directory.getSizeY());
+		
+		Iterator<Tree_Component> iter = directory.getIterator();
+		while(iter.hasNext()) {
+			Tree_Component treeComponent = iter.next();
+			if (treeComponent.isDirectory()) {
+				drawRectangle(g, (Tree_Directory) treeComponent);
+			}
+			else {
+				g.drawRect(treeComponent.getPositionX(), treeComponent.getPositionY(), treeComponent.getSizeX(), treeComponent.getSizeY());
+			}
+		}
 	}
 }
