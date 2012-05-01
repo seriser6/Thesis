@@ -13,7 +13,7 @@ public class Tree_Directory extends Tree_Component {
 		
 		File[] fileArray = file.listFiles();
 		int fileCount = fileArray.length;
-		subFiles = new ArrayList<Tree_Component>(fileCount+2);
+		subFiles = new ArrayList<Tree_Component>(fileCount);
 		
 		for (int i = 0; i < fileCount; i++)
 		{
@@ -63,7 +63,7 @@ public class Tree_Directory extends Tree_Component {
 	
 	public void makeDimension()
 	{
-		makeDimension(10000);
+		makeDimension(DIMENSION_CONST);
 	}
 	
 	public void makeRectangleBase(int sizeX, int sizeY)

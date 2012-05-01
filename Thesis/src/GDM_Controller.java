@@ -30,14 +30,11 @@ public class GDM_Controller {
 		metricType = new Metric_Size();
 		gdm_model = new GDM_Model(this);
 		gdm_view = new GDM_View(this, gdm_model);
-		while (! initializeDirectory());
-		gdm_view.repaint();
-		System.out.println(gdm_model.getDataString());
+		initializeDirectory();
 		while (true);
-		//exit();
 	}
 	
-	public boolean initializeDirectory() {
+	public void initializeDirectory() {
 		File directory = gdm_view.chooseDirectory();
 		if (directory == null)
 		{
@@ -49,10 +46,11 @@ public class GDM_Controller {
 		}
 		else
 		{
-			gdm_model.initializeDirectory(directory, metricType, gdm_view);
-			return true;
+			gdm_model.setMetricType(metricType);
+			gdm_model.initializeDirectory(directory, gdm_view);
+			gdm_view.graphicsChanged();
+			System.out.println(gdm_model.getDataString());
 		}
-		return false;
 	}
 	
 	public void exit()

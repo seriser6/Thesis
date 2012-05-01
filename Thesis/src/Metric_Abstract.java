@@ -18,4 +18,6 @@ public abstract class Metric_Abstract {
 	public long getMetricValue(Tree_File file) {
 		return getMetricValue(new File(file.getPath()));
 	}
+	
+	public abstract String getMetricString(long metricValue);
 }

@@ -44,7 +44,7 @@ public abstract class Tree_Component {
 	
 	public String getParentPath()
 	{
-		return parent.getPath();
+		return parent.getPath() + File.separator;
 	}
 	
 	public String getPath()

@@ -6,7 +6,7 @@ public class Tree_Base extends Tree_Directory {
 	
 	public Tree_Base(File file, Metric_Abstract metricType) {
 		super(file, null, metricType);
-		parentPath = file.getParent();
+		parentPath = file.getParent() + File.separator;
 	}
 
 	@Override
