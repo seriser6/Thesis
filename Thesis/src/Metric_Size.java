@@ -13,14 +13,14 @@ public class Metric_Size extends Metric_Abstract {
 		double value = (double) metricValue;
 		String unit;
 		if (value > 1000000000) {
-			value = ((int) value / 1000) / 1000000.0;
+			value = ((int) value / 1000000) / 1000.0;
 			unit = " gigabytes";
 		}
-		if (value > 1000000) {
+		else if (value > 1000000) {
 			value = ((int) value / 1000) / 1000.0;
 			unit = " megabytes";
 		}
-		if (value > 1000) {
+		else if (value > 1000) {
 			value = value / 1000.0;
 			unit = " kilobytes";
 		}

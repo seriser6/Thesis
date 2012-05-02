@@ -5,7 +5,6 @@ import java.util.Iterator;
 public class Tree_Directory extends Tree_Component {
 
 	ArrayList<Tree_Component> subFiles;
-	private static final int DIMENSION_CONST = 10000;
 	
 	public Tree_Directory(File file, Tree_Directory parent, Metric_Abstract metricType)
 	{
@@ -44,28 +43,6 @@ public class Tree_Directory extends Tree_Component {
 		return subFiles.iterator();
 	}
 	
-	public void makeDimension(int dimension)
-	{
-		this.dimension = dimension;
-
-		Iterator<Tree_Component> iter = getIterator();
-		while (iter.hasNext()) {
-			Tree_Component treeComponent = iter.next();
-			try {
-				treeComponent.makeDimension((int) (DIMENSION_CONST * treeComponent.getMetricValue() / metricValue));
-			}
-			catch (ArithmeticException e)
-			{
-				treeComponent.makeDimension(0);
-			}
-		}
-	}
-	
-	public void makeDimension()
-	{
-		makeDimension(DIMENSION_CONST);
-	}
-	
 	public void makeRectangleBase(int sizeX, int sizeY)
 	{
 		makeRectangle(sizeX, sizeY, 0, 0, true);
@@ -82,7 +59,7 @@ public class Tree_Directory extends Tree_Component {
 			while (iter.hasNext()) {
 				Tree_Component treeComponent = iter.next();
 				try {
-					childSize = sizeX * treeComponent.getDimension() / DIMENSION_CONST;
+					childSize = (int)Math.round((double)sizeX * (double)treeComponent.getMetricValue() / (double)metricValue);
 				}
 				catch (ArithmeticException e) {
 					childSize = 0;
@@ -95,7 +72,7 @@ public class Tree_Directory extends Tree_Component {
 			while (iter.hasNext()) {
 				Tree_Component treeComponent = iter.next();
 				try {
-					childSize = sizeY * treeComponent.getDimension() / DIMENSION_CONST;
+					childSize = (int)Math.round((double)sizeY * (double)treeComponent.getMetricValue() / (double)metricValue);
 				}
 				catch (ArithmeticException e) {
 					childSize = 0;

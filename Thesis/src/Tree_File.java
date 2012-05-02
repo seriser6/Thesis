@@ -15,10 +15,6 @@ public class Tree_File extends Tree_Component {
 		metricValue = metricType.getMetricValue(file);
 	}
 
-	public void makeDimension(int dimension) {
-		this.dimension = dimension;
-	}
-
 	@Override
 	void setMetricValue(Metric_Abstract metricType) {
 		setMetricValue(metricType, new File(getPath()));

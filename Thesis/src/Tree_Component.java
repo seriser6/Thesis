@@ -4,7 +4,6 @@ import java.io.File;
 public abstract class Tree_Component {
 	protected String name;
 	protected Tree_Directory parent;
-	protected int dimension; // dimensions for the size thing
 	protected long metricValue;
 	protected int positionX, positionY, sizeX, sizeY;
 
@@ -50,16 +49,6 @@ public abstract class Tree_Component {
 	public String getPath()
 	{
 		return getParentPath() + getName();
-	}
-	
-	public abstract void makeDimension(int dimension);
-	
-	public int getDimension() {
-		return dimension;
-	}
-
-	public void setDimension(int dimension) {
-		this.dimension = dimension;
 	}
 	
 	public void makeRectangle(int sizeX, int sizeY, int posX, int posY, boolean horizontal) {

@@ -50,8 +50,6 @@ public class GDM_Model
 	
 	public void initializeFileStruct(File directory) {
 		toplevel_directory = new Tree_Base(directory, metricType);
-		
-		toplevel_directory.makeDimension();
 	}
 	
 	public void initializeRectangleSizes(GDM_View view) {
