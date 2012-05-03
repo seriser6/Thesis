@@ -6,6 +6,7 @@ public abstract class Tree_Component {
 	protected Tree_Directory parent;
 	protected long metricValue;
 	protected int positionX, positionY, sizeX, sizeY;
+	protected boolean active;
 
 	public Tree_Component(File file, Tree_Directory parent)
 	{
@@ -51,7 +52,7 @@ public abstract class Tree_Component {
 		return getParentPath() + getName();
 	}
 	
-	public void makeRectangle(int sizeX, int sizeY, int posX, int posY, boolean horizontal) {
+	public void makeRectangle(int sizeX, int sizeY, int posX, int posY, boolean horizontal, Color_Abstract colorType) {
 		this.sizeX = sizeX;
 		this.sizeY = sizeY;
 		this.positionX = posX;
@@ -59,4 +60,12 @@ public abstract class Tree_Component {
 	}
 	
 	abstract boolean isDirectory();
+	
+	public boolean isActive() {
+		return active;
+	}
+	
+	abstract void activate();
+	
+	abstract void deactivate();
 }

@@ -18,9 +18,9 @@ public class GDM_Model
 	
 	private Tree_Directory fileStruct;
 	
-	private Metric_Abstract metricType;
-	
 	private boolean stable;
+	
+	private Metric_Abstract metricType;
 	
 	/**
 	 * GDM_Model()
@@ -32,10 +32,6 @@ public class GDM_Model
 		stable = false;
 	}
 	
-	public void setMetricType(Metric_Abstract metricType) {
-		this.metricType = metricType;
-	}
-	
 	public boolean isStable() {
 		return stable;
 	}
@@ -43,21 +39,20 @@ public class GDM_Model
 	public void initializeDirectory(File directory, GDM_View view)
 	{
 		stable = false;
-		initializeFileStruct(directory);
-		initializeRectangleSizes(view);
+		initializeFileStruct(directory, view.getMetricType());
+		initializeRectangleSizes(view.getCanvasWidth(), view.getCanvasHeight(), view.getColorType());
 		stable = true;
 	}
 	
-	public void initializeFileStruct(File directory) {
+	public void initializeFileStruct(File directory, Metric_Abstract metricType) {
+		this.metricType = metricType;
 		toplevel_directory = new Tree_Base(directory, metricType);
 	}
 	
-	public void initializeRectangleSizes(GDM_View view) {
+	public void initializeRectangleSizes(int canvasX, int canvasY, Color_Abstract colorType) {
 		stable = false;
-		int sizeX = view.getCanvasWidth();
-		int sizeY = view.getCanvasHeight();
 		
-		toplevel_directory.makeRectangleBase(sizeX, sizeY);
+		toplevel_directory.makeRectangleBase(canvasX, canvasY, colorType);
 		
 		fileStruct = toplevel_directory;
 		stable = true;
@@ -68,7 +63,7 @@ public class GDM_Model
 	}
 	
 	public String getFileDescription(int x, int y, Tree_Directory directory) {
-		//System.out.println(x + " " + y);
+		String returnString = "";
 		Iterator<Tree_Component> iter = directory.getIterator();
 		while (iter.hasNext()) {
 			Tree_Component treeComponent = iter.next();
@@ -76,15 +71,23 @@ public class GDM_Model
 				x <= treeComponent.getPositionX() + treeComponent.getSizeX() &&
 				y >= treeComponent.getPositionY() &&
 				y <= treeComponent.getPositionY() + treeComponent.getSizeY()) {
+				treeComponent.activate();
 				if (treeComponent.isDirectory()) {
-					return getFileDescription(x, y, (Tree_Directory) treeComponent);
+					returnString = getFileDescription(x, y, (Tree_Directory) treeComponent);
 				}
 				else {
-					return treeComponent.getPath() + "   |   " + metricType.getMetricString(treeComponent.getMetricValue());
+					returnString =  treeComponent.getPath() + "   |   " + metricType.getMetricString(treeComponent.getMetricValue());
 				}
+				break;
+			}
+			else {
+				treeComponent.deactivate();
 			}
 		}
-		return "";
+		while (iter.hasNext()) {
+			iter.next().deactivate();
+		}
+		return returnString;
 	}
 	
 	public String getDataString()

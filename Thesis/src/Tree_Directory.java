@@ -43,15 +43,15 @@ public class Tree_Directory extends Tree_Component {
 		return subFiles.iterator();
 	}
 	
-	public void makeRectangleBase(int sizeX, int sizeY)
+	public void makeRectangleBase(int sizeX, int sizeY, Color_Abstract colorType)
 	{
-		makeRectangle(sizeX, sizeY, 0, 0, true);
+		makeRectangle(sizeX, sizeY, 0, 0, true, colorType);
 	}
 	
 	// horizontal if horizontal is true, else vertical
-	public void makeRectangle(int sizeX, int sizeY, int posX, int posY, boolean horizontal)
+	public void makeRectangle(int sizeX, int sizeY, int posX, int posY, boolean horizontal, Color_Abstract colorType)
 	{
-		super.makeRectangle(sizeX,sizeY,posX,posY,horizontal);
+		super.makeRectangle(sizeX,sizeY,posX,posY,horizontal, colorType);
 		Iterator<Tree_Component> iter = getIterator();
 		
 		int childSize;
@@ -59,12 +59,14 @@ public class Tree_Directory extends Tree_Component {
 			while (iter.hasNext()) {
 				Tree_Component treeComponent = iter.next();
 				try {
+					//childSize = (int)Math.ceil((double)sizeX * (double)treeComponent.getMetricValue() / (double)metricValue);
 					childSize = (int)Math.round((double)sizeX * (double)treeComponent.getMetricValue() / (double)metricValue);
+					//childSize = (int) (sizeX * treeComponent.getMetricValue() / metricValue);
 				}
 				catch (ArithmeticException e) {
 					childSize = 0;
 				}
-				treeComponent.makeRectangle(childSize, sizeY, posX, posY, false);
+				treeComponent.makeRectangle(childSize, sizeY, posX, posY, false, colorType);
 				posX += childSize;
 			}
 		}
@@ -72,12 +74,14 @@ public class Tree_Directory extends Tree_Component {
 			while (iter.hasNext()) {
 				Tree_Component treeComponent = iter.next();
 				try {
+					//childSize = (int)Math.ceil((double)sizeY * (double)treeComponent.getMetricValue() / (double)metricValue);
 					childSize = (int)Math.round((double)sizeY * (double)treeComponent.getMetricValue() / (double)metricValue);
+					//childSize = (int) (sizeY * treeComponent.getMetricValue() / metricValue);
 				}
 				catch (ArithmeticException e) {
 					childSize = 0;
 				}
-				treeComponent.makeRectangle(sizeX, childSize, posX, posY, true);
+				treeComponent.makeRectangle(sizeX, childSize, posX, posY, true, colorType);
 				posY += childSize;
 			}
 		}
@@ -85,5 +89,19 @@ public class Tree_Directory extends Tree_Component {
 	
 	public boolean isDirectory() {
 		return true;
+	}
+	
+	public void deactivate() {
+		if (active) {
+			active = false;
+			Iterator<Tree_Component> iter = getIterator();
+			while (iter.hasNext()) {
+				iter.next().deactivate();
+			}
+		}
+	}
+	
+	public void activate() {
+		active = true;
 	}
 }
