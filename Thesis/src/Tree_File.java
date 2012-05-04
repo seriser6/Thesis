@@ -12,6 +12,11 @@ public class Tree_File extends Tree_Component {
 		
 		setMetricValue(metricType, file);
 	}
+	
+	public Tree_File(Tree_Directory directory) {
+		super(new File(directory.getPath()),directory.getParent());
+		metricValue = directory.getMetricValue();
+	}
 
 	public void setMetricValue(Metric_Abstract metricType, File file)
 	{
@@ -23,17 +28,13 @@ public class Tree_File extends Tree_Component {
 		setMetricValue(metricType, new File(getPath()));
 	}
 	
-	public boolean isDirectory() {
-		return false;
-	}
-	
 	public Color getColor() {
 		return color;
 	}
 	
 	public void makeRectangle(int sizeX, int sizeY, int posX, int posY, boolean horizontal, Color_Abstract colorType) {
 		super.makeRectangle(sizeX, sizeY, posX, posY, horizontal, colorType);
-		color = colorType.getColor(name);
+		color = colorType.getColor(this);
 	}
 	
 	public void activate() {

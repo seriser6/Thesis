@@ -666,7 +666,8 @@ public class Color_FileType implements Color_Abstract {
 			"par2"
 	};
 	
-	public Color getColor(String filename) {
+	public Color getColor(Tree_File file) {
+		String filename = file.getName();
 		
 		int lastIndex = filename.lastIndexOf('.');
 		

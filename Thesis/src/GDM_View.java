@@ -2,11 +2,11 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
@@ -53,6 +53,7 @@ public class GDM_View {
 	private JLabel label_text;
 	private JComboBox<String> comboBox_metric;
 	private JComboBox<String> comboBox_color;
+	private JButton btn_UpADirectory;
 	
 	/**
 	 * GDM_View()
@@ -120,23 +121,38 @@ public class GDM_View {
 		});
 		panel_buttons.add(btn_OpenDirectory);
 		
+		btn_UpADirectory = new JButton("Up a Directory");
+		btn_UpADirectory.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				changeDirectoryUp();
+			}
+		});
+		panel_buttons.add(btn_UpADirectory);
+		
 		JLabel lblMetric = new JLabel("Size Metric");
 		panel_buttons.add(lblMetric);
 		
-		//comboBox_metric = new JComboBox<String>(new String[] {"File Size", "Last Modified"});
-		comboBox_metric = new JComboBox(new String[] {"File Size", "Last Modified"});
+//		comboBox_metric = new JComboBox<String>(new String[] {"File Size", "Last Modified", "Oldest Modified"});
+		comboBox_metric = new JComboBox(new String[] {"File Size", "Last Modified", "Oldest Modified"});
 		comboBox_metric.setSelectedIndex(0);
 		comboBox_metric.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				switch(comboBox_metric.getSelectedIndex()) {
+				default:
 				case 0:
-					metricType = new Metric_Size();
+					if (!(metricType instanceof Metric_Size)) {
+						setMetricType(new Metric_Size());
+					}
 					break;
 				case 1:
-					metricType = new Metric_LastModified();
+					if (!(metricType instanceof Metric_LastModified)) {
+						setMetricType(new Metric_LastModified());
+					}
 					break;
-				default:
-					metricType = new Metric_Size();
+				case 2:
+					if (!(metricType instanceof Metric_OldestModified)) {
+						setMetricType(new Metric_OldestModified());
+					}
 					break;
 				}
 			}
@@ -146,17 +162,18 @@ public class GDM_View {
 		JLabel lblColor = new JLabel("Coloring");
 		panel_buttons.add(lblColor);
 		
-		//comboBox_color = new JComboBox<String>(new String[] {"File Type"});
-		comboBox_color = new JComboBox(new String[] {"File Type"});
+//		comboBox_color = new JComboBox<String>(new String[] {"File Type", "Last Modified"});
+		comboBox_color = new JComboBox(new String[] {"File Type", "Last_Modified"});
 		comboBox_color.setSelectedIndex(0);
 		comboBox_color.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				switch(comboBox_color.getSelectedIndex()) {
-				case 0:
-					colorType = new Color_FileType();
-					break;
 				default:
-					colorType = new Color_FileType();
+				case 0:
+					setColorType(new Color_FileType());
+					break;
+				case 1:
+					setColorType(new Color_LastModified());
 					break;
 				}
 			}
@@ -164,10 +181,32 @@ public class GDM_View {
 		panel_buttons.add(comboBox_color);
 		
 		panel_graphic = new JPanel();
+		panel_graphic.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				repaint_timer.stop();
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				repaint_timer.start();
+			}
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+//				try {
+					changeDirectoryDown(arg0.getX(),arg0.getY());
+//				} catch(NullPointerException e) {
+					// do nothing - phantom space or noninitialized graphics
+//				}
+			}
+		});
 		panel_graphic.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseMoved(MouseEvent arg0) {
-				setFileDescription(arg0.getX(),arg0.getY());
+				try {
+					setFileDescription(arg0.getX(),arg0.getY());
+				} catch(NullPointerException e) {
+					// do nothing - phantom space or noninitialized graphics
+				}
 			}
 		});
 		frame.getContentPane().add(panel_graphic, BorderLayout.CENTER);
@@ -188,8 +227,20 @@ public class GDM_View {
 		return colorType;
 	}
 	
+	public void setColorType(Color_Abstract newColorType) {
+		colorType = newColorType;
+		graphicsChanged();
+		//gdm_model.initializeRectangleSizes(getCanvasWidth(), getCanvasHeight(), colorType);
+	}
+	
 	public Metric_Abstract getMetricType() {
 		return metricType;
+	}
+	
+	public void setMetricType(Metric_Abstract newMetricType) {
+		metricType = newMetricType;
+		gdm_model.initializeDirectory(gdm_model.getTreeDirectory().toFile(), this);
+		graphicsChanged();
 	}
 
 	private void printWelcomeMessage()
@@ -227,6 +278,20 @@ public class GDM_View {
 		label_text.setText("Error: No file was chosen");
 	}
 	
+	public void changeDirectoryUp() {
+		repaint_timer.stop();
+		gdm_model.changeDirectoryUp(this);
+		graphicsChanged();
+		repaint_timer.start();
+	}
+	
+	public void changeDirectoryDown(int x, int y) {
+		repaint_timer.stop();
+		gdm_model.changeDirectoryDown(x,y,this);
+		graphicsChanged();
+		repaint_timer.start();
+	}
+	
 	public void setFileDescription(int x, int y) {
 		label_text.setText(gdm_model.getFileDescription(x,y));
 	}
@@ -253,9 +318,7 @@ public class GDM_View {
 		viewDrawn = true;
 	}
 	
-	public void graphicsChanged(Graphics g) {
-		
-		Graphics2D g2 = (Graphics2D) g;
+	public void graphicsChanged(Graphics2D g2) {
 		drawRectangle(g2, gdm_model.getTreeDirectory());
 		g2.setColor(Color.WHITE);
 		drawOutlines(g2, gdm_model.getTreeDirectory());
@@ -279,10 +342,14 @@ public class GDM_View {
 				drawRectangle(g2, (Tree_Directory) treeComponent);
 			}
 			else {
-				g2.setColor(((Tree_File) treeComponent).getColor());
-				g2.fillRect(treeComponent.getPositionX(), treeComponent.getPositionY(), treeComponent.getSizeX(), treeComponent.getSizeY());
-				g2.setColor(Color.BLACK);
-				g2.drawRect(treeComponent.getPositionX(), treeComponent.getPositionY(), treeComponent.getSizeX(), treeComponent.getSizeY());
+				try {
+					g2.setColor(((Tree_File) treeComponent).getColor());
+					g2.fillRect(treeComponent.getPositionX(), treeComponent.getPositionY(), treeComponent.getSizeX(), treeComponent.getSizeY());
+					g2.setColor(Color.BLACK);
+					g2.drawRect(treeComponent.getPositionX(), treeComponent.getPositionY(), treeComponent.getSizeX(), treeComponent.getSizeY());
+				} catch (ClassCastException e) {
+					// do nothing
+				}
 			}
 		}
 	}

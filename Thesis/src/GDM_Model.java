@@ -12,11 +12,9 @@ public class GDM_Model
 {
 
 	// The GDM_Controller object
-	private GDM_Controller gdm_controller;
+	//private GDM_Controller gdm_controller;
 	
-	private Tree_Base toplevel_directory;
-	
-	private Tree_Directory fileStruct;
+	private Tree_Base fileStruct;
 	
 	private boolean stable;
 	
@@ -28,12 +26,37 @@ public class GDM_Model
 	 */
 	public GDM_Model(GDM_Controller gdm_controller)
 	{
-		this.gdm_controller = gdm_controller;
+		//this.gdm_controller = gdm_controller;
 		stable = false;
 	}
 	
 	public boolean isStable() {
 		return stable;
+	}
+	
+	public void changeDirectoryUp(GDM_View view) {
+		stable = false;
+		initializeDirectory(new File(fileStruct.getParentPath()), view);
+		stable = true;
+	}
+	
+	public void changeDirectoryDown(int x, int y, GDM_View view) {
+		stable = false;
+		Iterator<Tree_Component> iter = fileStruct.getIterator();
+		while (iter.hasNext()) {
+			Tree_Component treeComponent = iter.next();
+			if (x >= treeComponent.getPositionX() &&
+				x <= treeComponent.getPositionX() + treeComponent.getSizeX() &&
+				y >= treeComponent.getPositionY() &&
+				y <= treeComponent.getPositionY() + treeComponent.getSizeY()) {
+				treeComponent.activate();
+				if (treeComponent.isDirectory()) {
+					initializeDirectory(new File(treeComponent.getPath()), view);
+				}
+				break;
+			}
+		}
+		stable = true;
 	}
 	
 	public void initializeDirectory(File directory, GDM_View view)
@@ -45,16 +68,14 @@ public class GDM_Model
 	}
 	
 	public void initializeFileStruct(File directory, Metric_Abstract metricType) {
+		fileStruct = null;
 		this.metricType = metricType;
-		toplevel_directory = new Tree_Base(directory, metricType);
+		fileStruct = new Tree_Base(directory, metricType);
 	}
 	
 	public void initializeRectangleSizes(int canvasX, int canvasY, Color_Abstract colorType) {
 		stable = false;
-		
-		toplevel_directory.makeRectangleBase(canvasX, canvasY, colorType);
-		
-		fileStruct = toplevel_directory;
+		fileStruct.makeRectangleBase(canvasX, canvasY, colorType);	
 		stable = true;
 	}
 	

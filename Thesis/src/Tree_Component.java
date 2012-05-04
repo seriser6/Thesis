@@ -7,11 +7,13 @@ public abstract class Tree_Component {
 	protected long metricValue;
 	protected int positionX, positionY, sizeX, sizeY;
 	protected boolean active;
+	protected boolean directory;
 
 	public Tree_Component(File file, Tree_Directory parent)
 	{
 		this.parent = parent;
 		name = file.getName();
+		directory = false;
 	}
 	
 	public long getMetricValue()
@@ -42,6 +44,10 @@ public abstract class Tree_Component {
 		return name;
 	}
 	
+	public Tree_Directory getParent() {
+		return parent;
+	}
+	
 	public String getParentPath()
 	{
 		return parent.getPath() + File.separator;
@@ -59,7 +65,9 @@ public abstract class Tree_Component {
 		this.positionY = posY;
 	}
 	
-	abstract boolean isDirectory();
+	public boolean isDirectory() {
+		return directory;
+	}
 	
 	public boolean isActive() {
 		return active;
@@ -68,4 +76,8 @@ public abstract class Tree_Component {
 	abstract void activate();
 	
 	abstract void deactivate();
+	
+	public File toFile() {
+		return new File(getPath());
+	}
 }
