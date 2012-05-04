@@ -54,6 +54,7 @@ public class GDM_View {
 	private JComboBox<String> comboBox_metric;
 	private JComboBox<String> comboBox_color;
 	private JButton btn_UpADirectory;
+	private JButton btn_Refresh;
 	
 	/**
 	 * GDM_View()
@@ -129,11 +130,19 @@ public class GDM_View {
 		});
 		panel_buttons.add(btn_UpADirectory);
 		
+		btn_Refresh = new JButton("Refresh");
+		btn_Refresh.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				refreshDirectory();
+			}
+		});
+		panel_buttons.add(btn_Refresh);
+		
 		JLabel lblMetric = new JLabel("Size Metric");
 		panel_buttons.add(lblMetric);
 		
-//		comboBox_metric = new JComboBox<String>(new String[] {"File Size", "Last Modified", "Oldest Modified"});
-		comboBox_metric = new JComboBox(new String[] {"File Size", "Last Modified", "Oldest Modified"});
+		comboBox_metric = new JComboBox<String>(new String[] {"File Size", "Last Modified", "Oldest Modified"});
+//		comboBox_metric = new JComboBox(new String[] {"File Size", "Last Modified", "Oldest Modified"});
 		comboBox_metric.setSelectedIndex(0);
 		comboBox_metric.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -162,8 +171,8 @@ public class GDM_View {
 		JLabel lblColor = new JLabel("Coloring");
 		panel_buttons.add(lblColor);
 		
-//		comboBox_color = new JComboBox<String>(new String[] {"File Type", "Last Modified"});
-		comboBox_color = new JComboBox(new String[] {"File Type", "Last_Modified"});
+		comboBox_color = new JComboBox<String>(new String[] {"File Type", "Last Modified"});
+//		comboBox_color = new JComboBox(new String[] {"File Type", "Last_Modified"});
 		comboBox_color.setSelectedIndex(0);
 		comboBox_color.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -276,6 +285,13 @@ public class GDM_View {
 	{
 		repaint_timer.start();
 		label_text.setText("Error: No file was chosen");
+	}
+	
+	public void refreshDirectory() {
+		repaint_timer.stop();
+		gdm_model.refreshDirectory(this);
+		graphicsChanged();
+		repaint_timer.start();
 	}
 	
 	public void changeDirectoryUp() {

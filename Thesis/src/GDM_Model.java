@@ -34,6 +34,12 @@ public class GDM_Model
 		return stable;
 	}
 	
+	public void refreshDirectory(GDM_View view) {
+		stable = false;
+		initializeDirectory(new File(fileStruct.getPath()), view);
+		stable = true;
+	}
+	
 	public void changeDirectoryUp(GDM_View view) {
 		stable = false;
 		initializeDirectory(new File(fileStruct.getParentPath()), view);
