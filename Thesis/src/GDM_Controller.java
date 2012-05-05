@@ -46,9 +46,4 @@ public class GDM_Controller {
 			gdm_view.graphicsChanged();
 		}
 	}
-	
-	public void exit()
-	{
-		System.exit(0);
-	}
 }

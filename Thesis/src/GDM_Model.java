@@ -73,7 +73,7 @@ public class GDM_Model
 		stable = true;
 	}
 	
-	public void initializeFileStruct(File directory, Metric_Abstract metricType) {
+	private void initializeFileStruct(File directory, Metric_Abstract metricType) {
 		fileStruct = null;
 		this.metricType = metricType;
 		fileStruct = new Tree_Base(directory, metricType);
@@ -89,7 +89,7 @@ public class GDM_Model
 		return getFileDescription(x, y, fileStruct);
 	}
 	
-	public String getFileDescription(int x, int y, Tree_Directory directory) {
+	private String getFileDescription(int x, int y, Tree_Directory directory) {
 		String returnString = "";
 		Iterator<Tree_Component> iter = directory.getIterator();
 		while (iter.hasNext()) {
@@ -115,6 +115,10 @@ public class GDM_Model
 			iter.next().deactivate();
 		}
 		return returnString;
+	}
+	
+	public Tree_Directory getTreeDirectory() {
+		return fileStruct;
 	}
 	
 	public String getDataString()
@@ -143,9 +147,5 @@ public class GDM_Model
 		}
 		
 		return dataString;
-	}
-	
-	public Tree_Directory getTreeDirectory() {
-		return fileStruct;
 	}
 }

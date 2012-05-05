@@ -2,7 +2,7 @@ import java.io.File;
 import java.util.Date;
 
 
-public class Metric_OldestModified extends Metric_Abstract {
+public class Metric_OldestModified implements Metric_Abstract {
 
 	private long currentTime;
 	
@@ -10,7 +10,6 @@ public class Metric_OldestModified extends Metric_Abstract {
 		currentTime = System.currentTimeMillis();
 	}
 	
-	@Override
 	public long getMetricValue(File file) {
 		long metric = currentTime-file.lastModified();
 		if (metric > 0)
@@ -18,7 +17,6 @@ public class Metric_OldestModified extends Metric_Abstract {
 		else return 0;
 	}
 
-	@Override
 	public String getMetricString(long metricValue) {
 		return new Date(metricValue+currentTime).toString();
 	}

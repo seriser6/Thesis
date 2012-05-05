@@ -1,14 +1,12 @@
 import java.io.File;
 
 
-public class Metric_Size extends Metric_Abstract {
+public class Metric_Size implements Metric_Abstract {
 
-	@Override
 	public long getMetricValue(File file) {
 		return file.length();
 	}
 	
-	@Override
 	public String getMetricString(long metricValue) {
 		double value = (double) metricValue;
 		String unit;

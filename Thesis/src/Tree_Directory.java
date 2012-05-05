@@ -4,7 +4,7 @@ import java.util.Iterator;
 
 public class Tree_Directory extends Tree_Component {
 
-	ArrayList<Tree_Component> subFiles;
+	private ArrayList<Tree_Component> subFiles;
 
 	public Tree_Directory(File file, Tree_Directory parent, Metric_Abstract metricType)
 	{
@@ -13,7 +13,7 @@ public class Tree_Directory extends Tree_Component {
 		File[] fileArray = file.listFiles();
 		
 		if (fileArray != null) {
-			directory = true;
+			setDirectory(true);
 			int fileCount = fileArray.length;
 			subFiles = new ArrayList<Tree_Component>(fileCount);
 			
@@ -30,25 +30,10 @@ public class Tree_Directory extends Tree_Component {
 					newFile = new Tree_File(fileArray[i], this, metricType);
 				}
 				
-				metricValue += newFile.getMetricValue();
+				setMetricValue(getMetricValue() + newFile.getMetricValue());
 				subFiles.add(newFile);
 			}
 		}
-	}
-	
-	public void notDirectory(String name) {
-		for (int i = 0; i < subFiles.size(); i++) {
-			if (subFiles.get(i).getName().equals(name)) {
-				subFiles.set(i, new Tree_File((Tree_Directory)subFiles.get(i)));
-				break;
-			}
-		}
-	}
-	
-	public void setMetricValue(Metric_Abstract metricType)
-	{
-		Iterator<Tree_Component> iter = getIterator();
-		metricValue += iter.next().getMetricValue();
 	}
 	
 	public Iterator<Tree_Component> getIterator()
@@ -62,10 +47,11 @@ public class Tree_Directory extends Tree_Component {
 	}
 	
 	// horizontal if horizontal is true, else vertical
-	public void makeRectangle(int sizeX, int sizeY, int posX, int posY, boolean horizontal, Color_Abstract colorType)
+	@Override
+	protected void makeRectangle(int sizeX, int sizeY, int posX, int posY, boolean horizontal, Color_Abstract colorType)
 	{
 		super.makeRectangle(sizeX,sizeY,posX,posY,horizontal, colorType);
-		if (directory) {
+		if (isDirectory()) {
 			Iterator<Tree_Component> iter = getIterator();
 			
 			int childSize;
@@ -74,7 +60,7 @@ public class Tree_Directory extends Tree_Component {
 					Tree_Component treeComponent = iter.next();
 					try {
 						//childSize = (int)Math.ceil((double)sizeX * (double)treeComponent.getMetricValue() / (double)metricValue);
-						childSize = (int)Math.round((double)sizeX * (double)treeComponent.getMetricValue() / (double)metricValue);
+						childSize = (int)Math.round((double)sizeX * (double)treeComponent.getMetricValue() / (double)getMetricValue());
 						//childSize = (int) (sizeX * treeComponent.getMetricValue() / metricValue);
 					}
 					catch (ArithmeticException e) {
@@ -89,7 +75,7 @@ public class Tree_Directory extends Tree_Component {
 					Tree_Component treeComponent = iter.next();
 					try {
 						//childSize = (int)Math.ceil((double)sizeY * (double)treeComponent.getMetricValue() / (double)metricValue);
-						childSize = (int)Math.round((double)sizeY * (double)treeComponent.getMetricValue() / (double)metricValue);
+						childSize = (int)Math.round((double)sizeY * (double)treeComponent.getMetricValue() / (double)getMetricValue());
 						//childSize = (int) (sizeY * treeComponent.getMetricValue() / metricValue);
 					}
 					catch (ArithmeticException e) {
@@ -103,8 +89,8 @@ public class Tree_Directory extends Tree_Component {
 	}
 	
 	public void deactivate() {
-		if (active) {
-			active = false;
+		if (isActive()) {
+			setActive(false);
 			Iterator<Tree_Component> iter = getIterator();
 			while (iter.hasNext()) {
 				iter.next().deactivate();
@@ -113,6 +99,6 @@ public class Tree_Directory extends Tree_Component {
 	}
 	
 	public void activate() {
-		active = true;
+		setActive(true);
 	}
 }

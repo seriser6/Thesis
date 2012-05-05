@@ -2,12 +2,12 @@ import java.io.File;
 
 
 public abstract class Tree_Component {
-	protected String name;
-	protected Tree_Directory parent;
-	protected long metricValue;
-	protected int positionX, positionY, sizeX, sizeY;
-	protected boolean active;
-	protected boolean directory;
+	private String name;
+	private Tree_Directory parent;
+	private long metricValue;
+	private int positionX, positionY, sizeX, sizeY;
+	private boolean active;
+	private boolean directory;
 
 	public Tree_Component(File file, Tree_Directory parent)
 	{
@@ -15,7 +15,19 @@ public abstract class Tree_Component {
 		name = file.getName();
 		directory = false;
 	}
-	
+
+	protected void setMetricValue(long metricValue) {
+		this.metricValue = metricValue;
+	}
+
+	protected void setActive(boolean active) {
+		this.active = active;
+	}
+
+	protected void setDirectory(boolean directory) {
+		this.directory = directory;
+	}
+
 	public long getMetricValue()
 	{
 		return metricValue;
@@ -37,18 +49,16 @@ public abstract class Tree_Component {
 		return sizeY;
 	}
 
-	abstract void setMetricValue(Metric_Abstract metricType);
-	
 	public String getName()
 	{
 		return name;
 	}
 	
-	public Tree_Directory getParent() {
+	protected Tree_Directory getParent() {
 		return parent;
 	}
 	
-	public String getParentPath()
+	protected String getParentPath()
 	{
 		return parent.getPath() + File.separator;
 	}
@@ -58,7 +68,7 @@ public abstract class Tree_Component {
 		return getParentPath() + getName();
 	}
 	
-	public void makeRectangle(int sizeX, int sizeY, int posX, int posY, boolean horizontal, Color_Abstract colorType) {
+	protected void makeRectangle(int sizeX, int sizeY, int posX, int posY, boolean horizontal, Color_Abstract colorType) {
 		this.sizeX = sizeX;
 		this.sizeY = sizeY;
 		this.positionX = posX;

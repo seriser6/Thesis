@@ -35,8 +35,6 @@ public class GDM_View {
 	// The GDM_Model object
 	private GDM_Model 	   gdm_model;
 	
-	//private GDM_View	   gdm_view;
-	
 	private Timer	  repaint_timer;
 	
 	private Metric_Abstract metricType;
@@ -62,7 +60,6 @@ public class GDM_View {
 	 */
 	public GDM_View(GDM_Controller gdm_controller, GDM_Model gdm_model)
 	{
-		//gdm_view = this;
 		this.gdm_controller = gdm_controller;
 		this.gdm_model = gdm_model;
 		viewDrawn = false;
@@ -72,7 +69,6 @@ public class GDM_View {
 		repaint_timer = new Timer(20, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//repaint_timer.stop();
 				if (modelStable() && viewDrawn()) {
 					resetRectangles();
 					graphicsChanged();
@@ -89,20 +85,6 @@ public class GDM_View {
 	{
 		frame = new JFrame();
 		frame.setMinimumSize(new Dimension(200, 100));
-		/*
-		frame.addComponentListener(new ComponentAdapter() {
-			@Override
-			public void componentResized(ComponentEvent arg0) {
-				//repaint_timer.start();
-			}
-		});
-		frame.addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowDeiconified(WindowEvent arg0) {
-				//repaint_timer.start();
-			}
-		});
-		*/
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(new Dimension(1100,700));
 		frame.setMaximizedBounds(GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds());
@@ -201,11 +183,11 @@ public class GDM_View {
 			}
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-//				try {
+				try {
 					changeDirectoryDown(arg0.getX(),arg0.getY());
-//				} catch(NullPointerException e) {
+				} catch(NullPointerException e) {
 					// do nothing - phantom space or noninitialized graphics
-//				}
+				}
 			}
 		});
 		panel_graphic.addMouseMotionListener(new MouseMotionAdapter() {
@@ -236,17 +218,16 @@ public class GDM_View {
 		return colorType;
 	}
 	
-	public void setColorType(Color_Abstract newColorType) {
+	private void setColorType(Color_Abstract newColorType) {
 		colorType = newColorType;
 		graphicsChanged();
-		//gdm_model.initializeRectangleSizes(getCanvasWidth(), getCanvasHeight(), colorType);
 	}
 	
 	public Metric_Abstract getMetricType() {
 		return metricType;
 	}
 	
-	public void setMetricType(Metric_Abstract newMetricType) {
+	private void setMetricType(Metric_Abstract newMetricType) {
 		metricType = newMetricType;
 		gdm_model.initializeDirectory(gdm_model.getTreeDirectory().toFile(), this);
 		graphicsChanged();
@@ -271,7 +252,7 @@ public class GDM_View {
 		return directory;
 	}
 	
-	public boolean modelStable() {
+	private boolean modelStable() {
 		return gdm_model.isStable();
 	}
 	
@@ -287,28 +268,28 @@ public class GDM_View {
 		label_text.setText("Error: No file was chosen");
 	}
 	
-	public void refreshDirectory() {
+	private void refreshDirectory() {
 		repaint_timer.stop();
 		gdm_model.refreshDirectory(this);
 		graphicsChanged();
 		repaint_timer.start();
 	}
 	
-	public void changeDirectoryUp() {
+	private void changeDirectoryUp() {
 		repaint_timer.stop();
 		gdm_model.changeDirectoryUp(this);
 		graphicsChanged();
 		repaint_timer.start();
 	}
 	
-	public void changeDirectoryDown(int x, int y) {
+	private void changeDirectoryDown(int x, int y) {
 		repaint_timer.stop();
 		gdm_model.changeDirectoryDown(x,y,this);
 		graphicsChanged();
 		repaint_timer.start();
 	}
 	
-	public void setFileDescription(int x, int y) {
+	private void setFileDescription(int x, int y) {
 		label_text.setText(gdm_model.getFileDescription(x,y));
 	}
 	
@@ -320,7 +301,7 @@ public class GDM_View {
 		return panel_graphic.getHeight()-1;
 	}
 	
-	public boolean viewDrawn() {
+	private boolean viewDrawn() {
 		return viewDrawn;
 	}
 	
@@ -334,18 +315,18 @@ public class GDM_View {
 		viewDrawn = true;
 	}
 	
-	public void graphicsChanged(Graphics2D g2) {
+	private void graphicsChanged(Graphics2D g2) {
 		drawRectangle(g2, gdm_model.getTreeDirectory());
 		g2.setColor(Color.WHITE);
 		drawOutlines(g2, gdm_model.getTreeDirectory());
 		panel_graphic.paintComponents(g2);
 	}
 	
-	public void resetRectangles() {
+	private void resetRectangles() {
 		gdm_model.initializeRectangleSizes(getCanvasWidth(), getCanvasHeight(), colorType);
 	}
 	
-	public void drawRectangle(Graphics2D g2, Tree_Directory directory) {
+	private void drawRectangle(Graphics2D g2, Tree_Directory directory) {
 		if (directory.isActive()) {
 			g2.setColor(Color.WHITE);
 			g2.drawRect(directory.getPositionX(), directory.getPositionY(), directory.getSizeX(), directory.getSizeY());
@@ -370,7 +351,7 @@ public class GDM_View {
 		}
 	}
 	
-	public void drawOutlines(Graphics2D g2, Tree_Component treeComponent) {
+	private void drawOutlines(Graphics2D g2, Tree_Component treeComponent) {
 		g2.drawRect(treeComponent.getPositionX(), treeComponent.getPositionY(), treeComponent.getSizeX(), treeComponent.getSizeY());
 		if (treeComponent.isDirectory()) {
 			Iterator<Tree_Component> iter = ((Tree_Directory) treeComponent).getIterator();
