@@ -5,12 +5,13 @@ import java.io.File;
  * The controller portion of the model view controller.
  * @author John Sarris (sarriskj)
  */
-public class GDM_Controller {
+public class GDM_Controller 
+{
 	
-	// The gdm_view object
+	// The GDM_View object
 	private GDM_View gdm_view;
 	
-	// The gdm_model object
+	// The GDM_Model object
 	private GDM_Model gdm_model;
 	
 	public static void main(String[] args)
@@ -19,18 +20,22 @@ public class GDM_Controller {
 	}
 	
 	/**
-	 * GDM_Controller()
+	 * public GDM_Controller()
 	 * The constructor for the GDM_Controller object.
 	 */
 	public GDM_Controller()
 	{
-		gdm_model = new GDM_Model(this);
+		gdm_model = new GDM_Model();
 		gdm_view = new GDM_View(this, gdm_model);
 		initializeDirectory();
 		while (true);
 	}
-	
-	public void initializeDirectory() {
+	/**
+	 * public void initializeDirectory()
+	 * initializes the program to the a directory chosen by the user
+	 */
+	public void initializeDirectory() 
+	{
 		File directory = gdm_view.chooseDirectory();
 		if (directory == null)
 		{

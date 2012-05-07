@@ -1,8 +1,16 @@
 import java.awt.Color;
 
-public class Color_FileType implements Color_Abstract {
+/**
+ * Color_FileType
+ * implements Color_Abstract in order to be used as a coloring algorithm
+ * operates so that videos are red, images are yellow, audio is pink, documents are blue,
+ * scripts are green, code is orange, databases are cyan, compressed files are dark gray,
+ * and everything else is light gray.
+ */
+public class Color_FileType implements Color_Abstract 
+{	
 	
-	
+	// String array of image extensions
 	private String[] extImage = new String[] {
 			"act",
 			"pal",
@@ -168,6 +176,7 @@ public class Color_FileType implements Color_Abstract {
 			"x3d",
 			"z3d"
 	};
+	// String array of video extensions
 	private String[] extVideo = new String[] {
 			"aaf",
 			"3gp",
@@ -210,6 +219,7 @@ public class Color_FileType implements Color_Abstract {
 			"suf",
 			"wlmp"
 	};
+	// String array of audio extensions
 	private String[] extAudio = new String[] {
 			"aiff",
 			"au",
@@ -313,6 +323,7 @@ public class Color_FileType implements Color_Abstract {
 			"snd",
 			"syn"
 	};
+	// String array of document extensions
 	private String[] extDocument = new String[] {
 			"602",
 			"abw",
@@ -371,6 +382,7 @@ public class Color_FileType implements Color_Abstract {
 			"xml",
 			"xps"
 	};
+	// String array of script extensions
 	private String[] extScript = new String[] {
 			"ahk",
 			"applescript",
@@ -421,6 +433,7 @@ public class Color_FileType implements Color_Abstract {
 			"xpl",
 			"ebuild"
 	};
+	// String array of code extensions
 	private String[] extCode = new String[] {
 			"ada",
 			"adb",
@@ -525,6 +538,7 @@ public class Color_FileType implements Color_Abstract {
 			"xsl",
 			"y"
 	};
+	// String array of database extensions
 	private String[] extDatabase = new String[] {
 			"accdb",
 			"adt",
@@ -573,6 +587,7 @@ public class Color_FileType implements Color_Abstract {
 			"wdb",
 			"wmdb"
 	};
+	// String array of compressed extensions
 	private String[] extCompressed = new String[] {
 			"a",
 			"ar",
@@ -666,7 +681,14 @@ public class Color_FileType implements Color_Abstract {
 			"par2"
 	};
 	
-	public Color getColor(Tree_File file) {
+	/**
+	 * public Color getColor(Tree_File file)
+	 * returns the color that corresponds to the given file node
+	 * @param file - the file to get a color for
+	 * @return a Color object
+	 */
+	public Color getColor(Tree_File file) 
+	{
 		String filename = file.getName();
 		
 		int lastIndex = filename.lastIndexOf('.');
@@ -686,39 +708,103 @@ public class Color_FileType implements Color_Abstract {
 		return Color.LIGHT_GRAY;
 	}
 
-	private boolean isCode(String fileExt) {
+	/**
+	 * private boolean isCode(String fileExt)
+	 * check to see if the given extension matches a code file
+	 * @param fileExt - the extension of the file to colorize
+	 * @return the outcome of the stringMatch method call
+	 */
+	private boolean isCode(String fileExt) 
+	{
 		return stringMatch(fileExt, extCode);
 	}
 
-	private boolean isCompressed(String fileExt) {
+	/**
+	 * private boolean isCompressed(String fileExt)
+	 * check to see if the given extension matches a compressed file
+	 * @param fileExt - the extension of the file to colorize
+	 * @return the outcome of the stringMatch method call
+	 */
+	private boolean isCompressed(String fileExt) 
+	{
 		return stringMatch(fileExt, extCompressed);
 	}
 
-	private boolean isDatabase(String fileExt) {
+	/**
+	 * private boolean isDatabase(String fileExt)
+	 * check to see if the given extension matches a database file
+	 * @param fileExt - the extension of the file to colorize
+	 * @return the outcome of the stringMatch method call
+	 */
+	private boolean isDatabase(String fileExt) 
+	{
 		return stringMatch(fileExt, extDatabase);
 	}
 
-	private boolean isScript(String fileExt) {
+	/**
+	 * private boolean isScript(String fileExt)
+	 * check to see if the given extension matches a script file
+	 * @param fileExt - the extension of the file to colorize
+	 * @return the outcome of the stringMatch method call
+	 */
+	private boolean isScript(String fileExt) 
+	{
 		return stringMatch(fileExt, extScript);
 	}
 
-	private boolean isDocument(String fileExt) {
+	/**
+	 * private boolean isDocument(String fileExt)
+	 * check to see if the given extension matches a document file
+	 * @param fileExt - the extension of the file to colorize
+	 * @return the outcome of the stringMatch method call
+	 */
+	private boolean isDocument(String fileExt)
+	{
 		return stringMatch(fileExt, extDocument);
 	}
 
-	private boolean isAudio(String fileExt) {
+	/**
+	 * private boolean isAudio(String fileExt)
+	 * check to see if the given extension matches an audio file
+	 * @param fileExt - the extension of the file to colorize
+	 * @return the outcome of the stringMatch method call
+	 */
+	private boolean isAudio(String fileExt) 
+	{
 		return stringMatch(fileExt, extAudio);
 	}
 
-	private boolean isVideo(String fileExt) {
+	/**
+	 * private boolean isVideo(String fileExt)
+	 * check to see if the given extension matches a video file
+	 * @param fileExt - the extension of the file to colorize
+	 * @return the outcome of the stringMatch method call
+	 */
+	private boolean isVideo(String fileExt) 
+	{
 		return stringMatch(fileExt, extVideo);
 	}
 
-	private boolean isImage(String fileExt) {
+	/**
+	 * private boolean isImage(String fileExt)
+	 * check to see if the given extension matches an image file
+	 * @param fileExt - the extension of the file to colorize
+	 * @return the outcome of the stringMatch method call
+	 */
+	private boolean isImage(String fileExt) 
+	{
 		return stringMatch(fileExt, extImage);
 	}
 	
-	private boolean stringMatch(String fileExt, String[] extList) {
+	/**
+	 * private boolean stringMatch(String fileExt, String[] extList)
+	 * checks the list of strings for a match with the file extension
+	 * @param fileExt - the file extension
+	 * @param extList - the list to check for matches
+	 * @return a boolean representing if the extension matches or not
+	 */
+	private boolean stringMatch(String fileExt, String[] extList) 
+	{
 		for (int i = 0; i < extList.length; i++) {
 			if (fileExt.equals(extList[i])) {
 				return true;
